@@ -1,0 +1,30 @@
+name: Run Telegram Bot
+
+# Запуск вручную кнопкой
+on:
+  workflow_dispatch:
+
+jobs:
+  run_bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360 # Бот будет работать до 6 часов
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12.8'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Bot
+        env:
+          # Токен берется из секретов репозитория
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          python bot.py
